@@ -53,6 +53,7 @@ int win_pattern(int board[3][3], int curr_player){
         return curr_player;
         }
     }
+    return 0;
 }
 
 int main(void){
