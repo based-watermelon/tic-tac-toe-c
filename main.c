@@ -4,6 +4,8 @@
 
 
 #define CELL_SIZE  (320.0f / 3.0f)
+#define BOARD_X  40
+#define BOARD_Y  115
 
 typedef struct{
     int board[3][3];
@@ -14,17 +16,17 @@ typedef struct{
 
 int move_made(float x, float y, int board[3][3], int *curr_player, float cs){
                 int row = -1 ,column = -1;
-                if(x < 40 + cs && x > 40)
+                if(x < BOARD_X + cs && x > BOARD_X)
                     column = 0;
-                else if (x < 40 + 2*(cs) && x > 40 + cs)
+                else if (x < BOARD_X + 2*(cs) && x > BOARD_X + cs)
                     column = 1;
-                else if (x < 40 + 3*(cs) && x > 40 + 2*(cs))
+                else if (x < BOARD_X + 3*(cs) && x > BOARD_X + 2*(cs))
                     column = 2;
-                if(y > 115  && y < 115 + cs)
+                if(y > BOARD_Y  && y < BOARD_Y + cs)
                     row = 0;
-                else if (y > 115 + cs  && y < 115 + 2*cs )
+                else if (y > BOARD_Y + cs  && y < BOARD_Y + 2*cs )
                     row = 1;
-                else if (y > 115 + 2*cs  && y < 115 + 3*cs)
+                else if (y > BOARD_Y + 2*cs  && y < BOARD_Y + 3*cs)
                     row = 2;
 
                 if(row == -1 || column == -1)
@@ -69,6 +71,9 @@ int main(void){
 
     SetTargetFPS(60);
 
+    Texture2D cross = LoadTexture("assets/cross.png"); 
+    Texture2D circle = LoadTexture("assets/circle.png");
+
     //main game loop
     while(!(WindowShouldClose())){
         
@@ -101,6 +106,10 @@ int main(void){
             
             DrawText(TextFormat("Mouse X: %.0f", mousePos.x), 20, 20, 20, BLACK);
             DrawText(TextFormat("Mouse Y: %.0f", mousePos.y), 20, 50, 20, BLACK);
+            DrawLine((BOARD_X+CELL_SIZE), BOARD_Y , (BOARD_X+CELL_SIZE), (BOARD_Y+3*CELL_SIZE), BLACK);
+            DrawLine((BOARD_X+(2*CELL_SIZE)), BOARD_Y , (BOARD_X+2*CELL_SIZE), (BOARD_Y+3*CELL_SIZE), BLACK);
+            DrawLine(BOARD_X, 115+CELL_SIZE , (BOARD_X+(3*CELL_SIZE)), (115+CELL_SIZE), BLACK);
+            DrawLine(BOARD_X, BOARD_Y+(2*CELL_SIZE) , (BOARD_X+(3*CELL_SIZE)), (BOARD_Y+(2*CELL_SIZE)), BLACK);
         EndDrawing();
         
     }
