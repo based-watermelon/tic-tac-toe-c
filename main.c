@@ -71,8 +71,14 @@ int main(void){
 
     SetTargetFPS(60);
 
-    Texture2D cross = LoadTexture("assets/cross.png"); 
-    Texture2D circle = LoadTexture("assets/circle.png");
+    Image img = LoadImage("assets/cross.png");
+    ImageColorReplace(&img, WHITE, RAYWHITE);
+    Texture2D cross = LoadTextureFromImage(img);
+    UnloadImage(img);
+    Image img2 = LoadImage("assets/circle.png");
+    ImageColorReplace(&img2, WHITE, RAYWHITE);
+    Texture2D circle = LoadTextureFromImage(img2);
+    UnloadImage(img2);
 
     //main game loop
     while(!(WindowShouldClose())){
@@ -84,13 +90,14 @@ int main(void){
 
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && ng.game_won == 0){
             move_made(mousePos.x, mousePos.y, ng.board , &ng.current_player, CELL_SIZE);
-        for(int i=0;i<3;i++){
-            for(int j=0;j<3;j++){
-                printf("%d ", ng.board[i][j]);
-            }
-            printf("\n");
+        // for(int i=0;i<3;i++){
+        //     for(int j=0;j<3;j++){
+        //         printf("%d ", ng.board[i][j]);
+        //     }
+        //     printf("\n");
                 
-        }}
+        // }
+        }
         
         //rendering
         BeginDrawing();
@@ -110,6 +117,31 @@ int main(void){
             DrawLine((BOARD_X+(2*CELL_SIZE)), BOARD_Y , (BOARD_X+2*CELL_SIZE), (BOARD_Y+3*CELL_SIZE), BLACK);
             DrawLine(BOARD_X, 115+CELL_SIZE , (BOARD_X+(3*CELL_SIZE)), (115+CELL_SIZE), BLACK);
             DrawLine(BOARD_X, BOARD_Y+(2*CELL_SIZE) , (BOARD_X+(3*CELL_SIZE)), (BOARD_Y+(2*CELL_SIZE)), BLACK);
+        
+            for(int i=0;i<3;i++){
+                for(int j=0;j<3;j++){
+                    float xcent =  40 + j*(CELL_SIZE) + (CELL_SIZE/2);
+                    float ycent =   115 + i*(CELL_SIZE) + (CELL_SIZE/2);
+                    // if(ng.board[i][j]==0){
+                    //     continue;
+                    // }
+                    if(ng.board[i][j]==1){
+                        Rectangle cross_src = {0.0f, 0.0f, (float)cross.width, (float)cross.height};
+                        Rectangle cross_dest = { xcent, ycent, 50.0f, 50.0f };
+                        Vector2 cross_origin = { cross_dest.width / 2.0f, cross_dest.height / 2.0f };
+                        DrawTexturePro(cross, cross_src, cross_dest , cross_origin, 0.0f, WHITE);
+                    }
+                    else if(ng.board[i][j]==-1){
+                        Rectangle circle_src = {0.0f, 0.0f, (float)circle.width, (float)circle.height};
+                        Rectangle circle_dest = { xcent, ycent, 50.0f, 50.0f };
+                        Vector2 circle_origin = { circle_dest.width / 2.0f, circle_dest.height / 2.0f };
+                        DrawTexturePro(circle, circle_src, circle_dest , circle_origin, 0.0f, WHITE);
+                    }
+            }
+        }
+        
+        
+        
         EndDrawing();
         
     }
